@@ -1,0 +1,45 @@
+# Self-AI-Knowledge Configuration
+# Copy this file to config.toml and edit values
+
+[data_paths]
+base_dir = "./data"
+sessions_dir = "./data/sessions"
+knowledge_dir = "./data/knowledge"
+skills_dir = "./skills"
+db_path = "./data/index.db"
+
+[agents]
+# CLI entry points for different AI agents
+claude = "claude"           # Claude Code CLI or claude-term
+gemini = "gemini"           # Gemini CLI
+codex = "copilot"           # GitHub Copilot CLI or codex CLI
+
+[agent_profiles]
+# Optional: Multiple profiles per agent
+[agent_profiles.claude.default]
+command = "claude"
+
+[agent_profiles.claude.code]
+command = "claude code"
+
+[agent_profiles.gemini.default]
+command = "gemini"
+
+[agent_profiles.codex.default]
+command = "copilot"
+
+[logging]
+log_level = "INFO"  # DEBUG, INFO, WARNING, ERROR
+
+[web]
+host = "127.0.0.1"
+port = 8787
+reload = true
+
+[search]
+default_limit = 20
+enable_fts = true
+
+[skills]
+enabled = true
+auto_summarize = false
