@@ -63,7 +63,6 @@ class KnowledgeManager:
 
     def _extract_summary(self, content: str, max_length: int = 200) -> str:
         """Extract a brief summary from content."""
-        # Remove markdown formatting
         text = re.sub(r'[#*`\[\]]', '', content)
         text = text.strip()
         if len(text) <= max_length:
@@ -108,7 +107,6 @@ class KnowledgeManager:
         with open(path, encoding="utf-8") as f:
             content = f.read()
 
-        # Split frontmatter and content
         parts = content.split("---\n")
         if len(parts) < 3:
             return None
@@ -116,7 +114,6 @@ class KnowledgeManager:
         frontmatter = parts[1].strip()
         body = "---\n".join(parts[2:]).strip()
 
-        # Parse YAML frontmatter
         data = {}
         for line in frontmatter.split("\n"):
             line = line.strip()
@@ -150,29 +147,51 @@ class KnowledgeManager:
     ) -> list[dict]:
         """List knowledge items."""
         items = []
-        search_dir = self.knowledge_dir
+        
         if category:
-            search_dir = search_dir / category.value
-
-        if not search_dir.exists():
-            return []
-
-        for year_dir in sorted(search_dir.iterdir(), reverse=True):
-            if not year_dir.is_dir():
-                continue
-            for md_file in sorted(year_dir.glob("*.md"), reverse=True):
-                item = self._parse_markdown(md_file)
-                if item:
-                    items.append({
-                        "id": item.id,
-                        "title": item.title,
-                        "date": item.date.isoformat(),
-                        "category": item.category.value,
-                        "tags": item.tags,
-                        "summary": item.summary,
-                        "confidence": item.confidence.value,
-                    })
-                if len(items) >= limit:
-                    return items
+            # 特定 category：直接遍历年份目录
+            search_dir = self.knowledge_dir / category.value
+            if not search_dir.exists():
+                return []
+            
+            for year_dir in sorted(search_dir.iterdir(), reverse=True):
+                if not year_dir.is_dir():
+                    continue
+                for md_file in sorted(year_dir.glob("*.md"), reverse=True):
+                    item = self._parse_markdown(md_file)
+                    if item:
+                        items.append({
+                            "id": item.id,
+                            "title": item.title,
+                            "date": item.date.isoformat(),
+                            "category": item.category.value,
+                            "tags": item.tags,
+                            "summary": item.summary,
+                            "confidence": item.confidence.value,
+                        })
+                    if len(items) >= limit:
+                        return items
+        else:
+            # 所有 category：遍历所有子目录下的年份目录
+            for category_dir in sorted(self.knowledge_dir.iterdir(), reverse=True):
+                if not category_dir.is_dir():
+                    continue
+                for year_dir in sorted(category_dir.iterdir(), reverse=True):
+                    if not year_dir.is_dir():
+                        continue
+                    for md_file in sorted(year_dir.glob("*.md"), reverse=True):
+                        item = self._parse_markdown(md_file)
+                        if item:
+                            items.append({
+                                "id": item.id,
+                                "title": item.title,
+                                "date": item.date.isoformat(),
+                                "category": item.category.value,
+                                "tags": item.tags,
+                                "summary": item.summary,
+                                "confidence": item.confidence.value,
+                            })
+                        if len(items) >= limit:
+                            return items
 
         return items[:limit]

@@ -125,7 +125,7 @@ class Database:
         cursor = conn.cursor()
 
         cursor.execute("""
-            SELECT id, path, title, summary, category
+            SELECT id, title, summary
             FROM knowledge_items_fts
             WHERE knowledge_items_fts MATCH ?
             ORDER BY rank
@@ -135,7 +135,7 @@ class Database:
         rows = cursor.fetchall()
         conn.close()
 
-        return [dict(zip(["id", "path", "title", "summary", "category"], row)) for row in rows]
+        return [dict(zip(["id", "title", "summary"], row)) for row in rows]
 
     def add_session(self, session_data: dict) -> None:
         conn = sqlite3.connect(self.db_path)
