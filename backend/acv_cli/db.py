@@ -46,12 +46,10 @@ class Database:
             )
         """)
 
-        # FTS5 full-text search
+        # FTS5 full-text search (simplified without external content)
         cursor.execute("""
             CREATE VIRTUAL TABLE IF NOT EXISTS knowledge_items_fts USING fts5(
-                id, title, summary, content,
-                content='knowledge_items',
-                content_rowid='rowid'
+                id, title, summary, content
             )
         """)
 
@@ -81,9 +79,9 @@ class Database:
 
         # Update FTS index
         cursor.execute("""
-            INSERT INTO knowledge_items_fts(knowledge_items_fts, id, title, summary)
-            VALUES('rebuild', ?, ?, ?)
-        """, (item.id, item.title, item.summary or ""))
+            INSERT INTO knowledge_items_fts(id, title, summary, content)
+            VALUES(?, ?, ?, ?)
+        """, (item.id, item.title, item.summary or "", item.title + " " + (item.summary or "")))
 
         conn.commit()
         conn.close()
