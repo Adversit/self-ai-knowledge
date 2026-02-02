@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { api, type KnowledgeItem } from '../../api/client'
+import { api, type KnowledgeItem } from '../api/client'
 import { format } from 'date-fns'
 import { Search, BookOpen, Lightbulb, Cpu, Sparkles } from 'lucide-react'
 
@@ -71,6 +71,7 @@ export function KnowledgePage() {
           value={categoryFilter || ''}
           onChange={e => setCategoryFilter(e.target.value || null)}
           className="input w-48"
+          aria-label="Filter by category"
         >
           <option value="">All Categories</option>
           <option value="tech_notes">Tech Notes</option>

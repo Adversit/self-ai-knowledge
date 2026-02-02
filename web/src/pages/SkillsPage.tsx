@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { api, type Skill } from '../../api/client'
+import { api, type Skill } from '../api/client'
 import { Wrench, CheckCircle, AlertCircle } from 'lucide-react'
 
 export function SkillsPage() {

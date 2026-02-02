@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
-import { api, type Session } from '../../api/client'
+import { api, type Session } from '../api/client'
 import { format } from 'date-fns'
 import { Search, Clock, Tag } from 'lucide-react'
 

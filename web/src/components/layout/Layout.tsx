@@ -1,5 +1,5 @@
-import { Link, useLocation } from 'react-router-dom'
-import { LayoutDashboard, BookOpen, Wrench, Search } from 'lucide-react'
+import { Link, useLocation, Outlet } from 'react-router-dom'
+import { LayoutDashboard, BookOpen, Wrench } from 'lucide-react'
 
 const navItems = [
   { path: '/sessions', label: 'Sessions', icon: LayoutDashboard },
@@ -7,7 +7,7 @@ const navItems = [
   { path: '/skills', label: 'Skills', icon: Wrench },
 ]
 
-export function Layout({ children }: { children: React.ReactNode }) {
+export function Layout() {
   const location = useLocation()
 
   return (
@@ -26,11 +26,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <Link
                 key={path}
                 to={path}
-                className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  isActive
-                    ? 'bg-accent-50 text-accent-700'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                }`}
+                className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${isActive
+                  ? 'bg-accent-50 text-accent-700'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                  }`}
               >
                 <Icon className="w-5 h-5" />
                 {label}
@@ -49,7 +48,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       {/* Main content */}
       <main className="flex-1 overflow-auto">
         <div className="max-w-6xl mx-auto p-8">
-          {children}
+          <Outlet />
         </div>
       </main>
     </div>
